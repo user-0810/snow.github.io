@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下雪特效</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #000818;
+        }
+        /* 雪花样式 */
+        .snow {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<script>
+    // 创建雪花数量
+    const snowCount = 120;
+    // 获取页面宽高
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+
+    for (let i = 0; i < snowCount; i++) {
+        // 创建雪花元素
+        let snow = document.createElement('div');
+        snow.classList.add('snow');
+        // 随机雪花大小
+        let size = Math.random() * 4 + 1;
+        snow.style.width = size + 'px';
+        snow.style.height = size + 'px';
+        // 初始随机位置
+        let startX = Math.random() * winW;
+        let startY = Math.random() * winH - winH;
+        snow.style.left = startX + 'px';
+        snow.style.top = startY + 'px';
+        // 飘落速度、左右摇摆速度
+        let speedY = Math.random() * 1.5 + 0.5;
+        let speedX = Math.random() * 0.8 - 0.4;
+        document.body.appendChild(snow);
+
+        // 雪花下落动画
+        function fall() {
+            let x = parseFloat(snow.style.left);
+            let y = parseFloat(snow.style.top);
+            y += speedY;
+            x += speedX;
+            // 落到底部重置到顶部
+            if (y > winH) {
+                y = -10;
+                x = Math.random() * winW;
+            }
+            // 左右边界回弹
+            if (x < -10) x = winW;
+            if (x > winW) x = 0;
+            snow.style.left = x + 'px';
+            snow.style.top = y + 'px';
+            requestAnimationFrame(fall);
+        }
+        fall();
+    }
+
+    // 窗口大小自适应
+    window.addEventListener('resize', () => {
+        location.reload();
+    })
+</script>
+</body>
+</html>
